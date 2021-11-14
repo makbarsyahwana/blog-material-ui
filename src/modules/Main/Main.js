@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Main = ({ getPostAction, getCommentAction, post, comments }) => {
+const Main = ({ getPostAction, getCommentAction, post, comments, logoutAction }) => {
     const classes = useStyles();
     const navigate = useNavigate();
     const location = useLocation();
@@ -67,7 +67,7 @@ const Main = ({ getPostAction, getCommentAction, post, comments }) => {
   
     return (
         <>
-            <Navbar pageTitle={'Homepage'}/>
+            <Navbar pageTitle={'Homepage'} logoutAction={logoutAction}/>
             <List>
                 {
                     post.result?.map((data, idx) => (

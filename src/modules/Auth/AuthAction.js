@@ -13,25 +13,29 @@ export function loginAction(userId, userEmail) {
         url: "https://jsonplaceholder.typicode.com/users/"
       }).then(function (response) {
         console.log(response)
+        console.log(userId, userEmail)
         if (response.data && response.status === 200) {
-            let foundUser = response.data.find(({email}) => email === userEmail )
+            let foundUser = response.data.find(({email, id}) => 
+                email === userEmail &&
+                String(id) === userId
+            )
+            console.log(foundUser)
             if (foundUser) {
                 savingLoginSession(foundUser);
                 dispatch({
                     type: types.LOGIN_SUCCESS,
                     payload: foundUser,
                 });
+                
             } else {
+                alert("your userId or email is invalid")
                 dispatch({
                     type: types.LOGIN_FAILURE,
                     error: "your userId or email is invalid"
                   });
             }
         } else {
-          let err_msg =
-            "Error while getting user data";
-            console.log(response)
-        //   let alertError = new AlertError(500, "Error", err_msg);
+          let err_msg = "Error while getting user data";
           dispatch({
             type: types.LOGIN_FAILURE,
             error: err_msg
@@ -53,5 +57,10 @@ export function accountLoggedIn() {
 }
 
 export function logoutAction() {
-   return localStorage.removeItem("loginCredential");
+    return function (dispatch, state) {
+        localStorage.removeItem("loginCredential");
+        dispatch({
+          type: types.LOGOUT
+        });
+      };;
 }

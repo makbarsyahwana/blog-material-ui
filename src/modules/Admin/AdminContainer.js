@@ -3,6 +3,7 @@ import { bindActionCreators } from "redux";
 import Admin from "./Admin";
 import { getAdminPostAction } from "./AdminAction"
 import {  getCommentAction } from "../Main/MainAction"
+import { logoutAction } from "../Auth/AuthAction"
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -15,7 +16,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
         getAdminPostAction,
-        getCommentAction
+        getCommentAction,
+        logoutAction
     },
     dispatch
   );

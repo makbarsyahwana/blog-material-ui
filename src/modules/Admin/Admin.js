@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Admin = ({ getAdminPostAction, getCommentAction, post }) => {
+const Admin = ({ getAdminPostAction, getCommentAction, post, logoutAction }) => {
 
   const classes = useStyles();
   const navigate = useNavigate();
@@ -37,12 +37,14 @@ const Admin = ({ getAdminPostAction, getCommentAction, post }) => {
     getAdminPostAction(user.id)
   }, [])
 
-  const handleEditPost = (id) => {
-    navigate(`/admin/post/${id}/edit`, {
+  const handleEditPost = (post) => {
+    navigate(`/admin/post/${post.id}/edit`, {
       state: {
         background: location,
         modalOpen: true,
-        titleName: "Edit Post"
+        titleName: "Edit Post",
+        postTitle: post.title,
+        postBody: post.body
       }
     })
   }
@@ -72,7 +74,7 @@ const Admin = ({ getAdminPostAction, getCommentAction, post }) => {
 
   return (
     <>
-      <Navbar pageTitle={'Admin'}/>
+      <Navbar pageTitle={'Admin'} logoutAction={logoutAction}/>
       <List>
         {
           post.result?.map((data, idx) => (
@@ -87,7 +89,7 @@ const Admin = ({ getAdminPostAction, getCommentAction, post }) => {
                     style={{
                       cursor: 'pointer'
                     }}
-                    onClick={() => handleEditPost(data.id)}
+                    onClick={() => handleEditPost(data)}
                   />
               </ListItem>
           ))

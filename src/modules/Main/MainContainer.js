@@ -5,6 +5,7 @@ import {
     getPostAction,
     getCommentAction
 } from "./MainAction"
+import { logoutAction } from "../Auth/AuthAction"
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -17,7 +18,8 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
         getPostAction,
-        getCommentAction
+        getCommentAction,
+        logoutAction
     },
     dispatch
   );

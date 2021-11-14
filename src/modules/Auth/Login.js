@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     makeStyles,
     TextField,
     Button
 } from '@material-ui/core'
 import { useNavigate } from 'react-router-dom'
+import { accountLoggedIn } from './AuthAction'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,33 +37,36 @@ const Login = ({ handleClose, loginAction, auth }) => {
     loginAction(userId, email);
   };
   console.log(auth)
-  auth.status && navigate('/admin')
+  {auth.status && navigate('/admin')}
 
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <TextField
-        label="User Id"
-        variant="filled"
-        required
-        value={userId}
-        onChange={e => setUserId(e.target.value)}
-      />
-      <TextField
-        label="Email"
-        variant="filled"
-        required
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <div>
-        <Button variant="contained" onClick={handleClose}>
-          Cancel
-        </Button>
-        <Button type="submit" variant="contained" color="primary">
-          Login
-        </Button>
-      </div>
-    </form>
+    <>
+        {/* {auth.error && alert(auth.error)} */}
+        <form className={classes.root} onSubmit={handleSubmit}>
+        <TextField
+            label="User Id"
+            variant="filled"
+            required
+            value={userId}
+            onChange={e => setUserId(e.target.value)}
+        />
+        <TextField
+            label="Email"
+            variant="filled"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+        />
+        <div>
+            <Button variant="contained" onClick={handleClose}>
+            Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+            Login
+            </Button>
+        </div>
+        </form>
+    </>
   );
 };
 

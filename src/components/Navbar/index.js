@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { 
     accountLoggedIn,
-    logoutAction
 } from "../../modules/Auth/AuthAction";
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Navbar = ({ pageTitle }) => {
+const Navbar = ({ pageTitle, logoutAction }) => {
 
     const navigate = useNavigate()
     const classes = useStyles();
