@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -13,6 +13,7 @@ import {
     Typography
 } from '@material-ui/core'
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FormInputError } from '../Error/FormInputError';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -58,7 +59,17 @@ const PostModal = (props) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [open, setOpen] = useState(true);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [titleErrMsg, setTitleErrMsg] = useState('')
+  const [bodyErrMsg, setBodyErrMsg] = useState('')
+
   console.log(location)
+
+  useEffect(() => {
+    location.state.postTitle && setTitle(location.state.postTitle)
+    location.state.postBody && setBody(location.state.postBody)
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,6 +78,27 @@ const PostModal = (props) => {
     setOpen(false);
     navigate(-1)
   };
+
+  const handleSubmit = () => {
+    if (verifyForm()) {
+      navigate(-1)
+    }
+  }
+
+  const verifyForm = () => {
+    setTitleErrMsg('')
+    setBodyErrMsg('')
+
+    if (
+      !title &&
+      !body
+    ) {
+      setTitleErrMsg('title cannot be empty')
+      setBodyErrMsg('body cannot be empty')
+      return false;
+    }
+    return true;
+  }
 
   return (
     <div>
@@ -87,7 +119,10 @@ const PostModal = (props) => {
                 type="text"
                 fullWidth
                 variant="standard"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
             />
+            <FormInputError text={titleErrMsg} />
             <TextField
                 autoFocus
                 margin="dense"
@@ -96,10 +131,13 @@ const PostModal = (props) => {
                 type="text"
                 fullWidth
                 variant="standard"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
             />
+            <FormInputError text={bodyErrMsg} />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleSubmit}>
             Save
           </Button>
         </DialogActions>
