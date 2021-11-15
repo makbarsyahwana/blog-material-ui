@@ -59,3 +59,7 @@ export function getCommentAction(postId) {
       });
     };
 }
+
+export function getLikedPost() {
+    return localStorage.getItem("likedPost");
+}

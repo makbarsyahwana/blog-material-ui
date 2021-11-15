@@ -8,6 +8,10 @@ import {
 } from '@material-ui/core'
 import PostModal from '../../components/Modal/ReadPostModal'
 import { useNavigate, Route, Routes, useLocation } from 'react-router-dom'
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import { getLikedPost } from './MainAction';
 
 const useStyles = makeStyles(theme => ({
     post: {
@@ -28,6 +32,7 @@ const Main = ({ getPostAction, getCommentAction, post, comments, logoutAction })
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState()
     const [body, setBody] = useState()
+    const [likedPost, setLikedPost] = useState([])
 
     const handleOpen = () => {
         setOpen(true);
@@ -50,6 +55,17 @@ const Main = ({ getPostAction, getCommentAction, post, comments, logoutAction })
         })
     }
 
+    const handleLike = async (id) => {
+        setLikedPost([...likedPost, id])
+        localStorage.setItem("likedPost", JSON.stringify([...likedPost, id]))
+    }
+
+    const handleUnlike = (id) => {
+        let updatedLikedPost = likedPost.filter(postId => postId !== id)
+        setLikedPost(updatedLikedPost)
+        localStorage.setItem("likedPost", JSON.stringify(updatedLikedPost))
+    }
+
     window.onscroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight) {
             if (post.loadResult) {
@@ -60,9 +76,14 @@ const Main = ({ getPostAction, getCommentAction, post, comments, logoutAction })
         }
     }
 
+    
+
     useEffect(() => {
         getPostAction(page)
+        setLikedPost(JSON.parse(getLikedPost()) ? JSON.parse(getLikedPost()) : [])
     }, [])
+
+    console.log(likedPost)
   
   
     return (
@@ -78,6 +99,27 @@ const Main = ({ getPostAction, getCommentAction, post, comments, logoutAction })
                                 primary={data.title}
                                 secondary={data.body}
                             />
+                            {/* {
+                                console.log(likedPost?.filter(postId => postId === data.id))
+                            } */}
+                            {
+                                likedPost?.filter(postId => postId === data.id).length > 0 ? (
+                                    <FavoriteIcon key={idx}
+                                        onClick={() => handleUnlike(data.id)}
+                                        style={{
+                                            cursor: "pointer",
+                                            color: "red"
+                                        }}
+                                    /> 
+                                ) : (
+                                    <FavoriteBorderIcon key={idx}
+                                        onClick={() => handleLike(data.id)}
+                                        style={{
+                                            cursor: "pointer"
+                                        }}
+                                    />
+                                )
+                            }
                         </ListItem>
                     ))
                 }
